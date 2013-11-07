@@ -139,11 +139,11 @@ public class CommandAPDU {
 			// Case 3 or 4 Extended APDU
 			else if (data[4] == 0x00) {
 				// Case 3 Extended APDU
-				if (data.length == 7 + (data[5] << 8 & data[6])) {
+				if (data.length == 7 + (data[5] << 8 | data[6])) {
 					return true;
 				}
 				// Case 4 Extended APDU
-				else if (data.length == 7 + (data[5] << 8 & data[6]) + 2) {
+				else if (data.length == 7 + (data[5] << 8 | data[6]) + 2) {
 					return true;
 				} else {
 					return false;
@@ -245,7 +245,7 @@ public class CommandAPDU {
 		}
 		// Case 4 Extended APDU
 		else if (isExtendedAPDU()) {
-			return (data[data.length - 2] << 8) & data[data.length - 1];
+			return (data[data.length - 2] << 8) | data[data.length - 1];
 		}
 		// Case 4 Standard APDU
 		else {
@@ -274,7 +274,7 @@ public class CommandAPDU {
 		}
 		// Case 3 / 4 Extended APDU
 		else if (isExtendedAPDU()) {
-			return (data[5] << 8) & data[6];
+			return (data[5] << 8) | data[6];
 		}
 		// Case 3 / 4 Standard APDU
 		else {
