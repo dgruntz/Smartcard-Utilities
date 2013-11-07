@@ -216,40 +216,42 @@ public class CommandAPDU {
 	}
 
 	/**
-	 * Returns the Value of the Le field of this APDU, or <code>-1</code> if not
-	 * present. The interpretation depends on whether this is a Standard or an
-	 * Extended APDU.
+	 * Returns the maximum number of bytes expected in the response of this
+	 * APDU as encoded in the Le field.
 	 * 
-	 * @return Value of the Le field or <code>-1</code> if not present.
-	 *         <code>0</code> is to be interpreted as 65536 (Extended APDU) or
-	 *         256 (Standard APDU), see
-	 *         {@link ch.fhnw.imvs.smartcard.CommandAPDU#isExtendedAPDU()
-	 *         boolean isExtendedAPDU()}.
+	 * @return the maximum namber of bytes as encoded in the Le field.
 	 */
 	public int getLe() {
 		// Case 1 APDU
 		if (data.length == 4) {
-			return -1;
+			return 0;
 		}
 		// Case 2 Standard APDU
 		else if (!isExtendedAPDU() && data.length == 5) {
-			return (data[4]);
+			if (data[4] == 0) {
+				return 256;
+			} else {
+				return (data[4]);
+			}
 		}
 		// Case 2 Extended APDU
 		else if (isExtendedAPDU() && data.length == 7) {
-			return (data[5] << 8) & data[6];
+			int res = (data[5] << 8) | data[6];
+			return res == 0 ? 65536 : res;
 		}
 		// Case 3 APDU
 		else if (data.length == 4 + (isExtendedAPDU() ? 3 : 1) + getLc()) {
-			return -1;
+			return 0;
 		}
 		// Case 4 Extended APDU
 		else if (isExtendedAPDU()) {
-			return (data[data.length - 2] << 8) | data[data.length - 1];
+			int res = (data[data.length - 2] << 8) | data[data.length - 1];
+			return res == 0 ? 65536 : res;
 		}
 		// Case 4 Standard APDU
 		else {
-			return data[data.length - 1];
+			int res = data[data.length - 1];
+			return res == 0 ? 256 : res;
 		}
 	}
 
