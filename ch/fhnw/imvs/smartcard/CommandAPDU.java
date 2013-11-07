@@ -315,7 +315,7 @@ public class CommandAPDU {
 	 *         notation, <code>false</code> otherwise.
 	 */
 	public boolean isExtendedAPDU() {
-		return (data.length >= 7) && data[5] == 0x00;
+		return (data.length >= 7) && data[4] == 0x00;
 	}
 
 	/**
