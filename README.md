@@ -1,4 +1,6 @@
 Smartcard-Utilities
 ===================
 
-Utilities to work with Smartcards
+Java Helper-Classes to work with SmartCard Communication.
+
+JavaDoc can be found at http://imvs-fhnw.github.io/Smartcard-Utilities/
